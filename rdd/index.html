@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>ReddCoin sub-Reddit - Stats</title>
+  <script type='text/javascript' src='http://code.jquery.com/jquery-1.7.js'></script>
+  <style>
+  @font-face {
+font-family: BPreplayExtended;
+src: url("fonts/BPreplayExtended.otf") format("opentype");
+}
+
+@font-face {
+font-family: BPreplayExtendedBold;
+font-weight: bold;
+src: url("fonts/BPreplayExtendedBold.otf") format("opentype");
+}
+
+body {
+font-family: BPreplayExtended;
+}
+
+.header {
+background: #EDEDED;
+text-align: center;
+font-family: BPreplayExtendedBold;
+font-size: 18px;
+}
+
+.donate {
+float: right;
+margin: 10px 10px 0 0;
+}
+
+.donate_heart {
+height: 18px;
+}
+
+.donate_details {
+
+}
+
+.data_container {
+	margin: 20px 0 20px 0;
+	border: 1px solid #EDEDED;
+}
+
+.data_label {
+	text-align: center;
+	font-size: 25px;
+	width: 100%;
+}
+
+.data_value {
+	text-align: center;
+	font-size: 40px;
+	margin: 20px 0 0 0;
+	width: 100%;
+}
+  </style>
+ <script type='text/javascript'>//<![CDATA[ 
+oldSubscribers = 0;
+newSubscribers = 0;
+oldSubscribersActive = 0;
+newSubscribersActive = 0;
+$(window).load(function(){
+$(".donate_details").hide();
+$(".donate").click(function(){
+  $(".donate_details").toggle();
+});
+loadJSONdata();
+setInterval( loadJSONdata, 3000 );
+setInterval( loadTwitter, 10000 );
+});
+
+function loadTwitter()
+{
+    $(function() {
+	console.log('updating twitter');
+	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+	});
+	};
+
+function loadJSONdata()
+{
+    $(function() {
+	console.log('getting json');
+        $.getJSON("http://www.reddit.com/r/reddCoin/about.json?jsonp=?", function(data) {
+	oldSubscribers = newSubscribers;
+	oldSubscribersActive = newSubscribersActive;
+	newSubscribers = data.data.subscribers;
+	newSubscribersActive = data.data.accounts_active;
+    $('.subscribers').text(newSubscribers);
+	$('.subscribers_active').text(newSubscribersActive);
+	if(newSubscribers > oldSubscribers)
+	$('.subscribers').css("color", "green")
+	else if(newSubscribers < oldSubscribers)
+	$('.subscribers').css("color", "red")
+	else
+	$('.subscribers').css("color", "black")
+	if(newSubscribersActive > oldSubscribersActive)
+	$('.subscribers_active').css("color", "green")
+	else if(newSubscribersActive < oldSubscribersActive)
+	$('.subscribers_active').css("color", "red")
+	else
+	$('.subscribers_active').css("color", "black")
+});
+});
+};
+//]]>  
+</script>
+</head>
+<body>
+<div class="donate_details">
+BTC:
+145TTNrbPznUtj9jLh7Mn4JeAdEXQjcMqs<br />
+RDD: 
+RctBPR4vuQmgDuqABUnrqCWjEDwaqF2FWd<br />
+</div>
+<div class="header"> 
+<img src="img/logo.png" />
+LIVE STATS
+<div class="donate">
+<img src="img/heart.png" class="donate_heart"/>
+Donate
+</div>
+</div>
+<div>
+<div class="data_container">
+<div class="data_label">Subscribers</div>
+<div class="data_value subscribers"></div>
+</div>
+<div class="data_container">
+<div class="data_label">Subscribers active</div>
+<div class="data_value subscribers_active"></div>
+</div>
+<div class="data_container">
+<div class="data_value">
+<a class="twitter-timeline" href="https://twitter.com/search?q=reddcoin" data-widget-id="443678529410969600"></a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</div>
+</div>
+</div>
+</body>
+</html>
