@@ -47,13 +47,13 @@ height: 18px;
 
 .data_label {
 	text-align: center;
-	font-size: 25px;
+	font-size: 15px;
 	width: 100%;
 }
 
 .data_value {
 	text-align: center;
-	font-size: 40px;
+	font-size: 25px;
 	margin: 20px 0 0 0;
 	width: 100%;
 }
@@ -65,6 +65,17 @@ oldSubscribersActive = 0;
 newSubscribersActive = 0;
 oldPrice = 0;
 newPrice = 0;
+oldSupply = 0;
+newSupply = 0;
+oldVolume = 0;
+newVolume = 0;
+oldChange = 0;
+newChange = 0;
+oldPosition = 0;
+newPosition = 0;
+oldMarketCap = 0;
+newMarketCap = 0;
+
 $(window).load(function(){
 $(".donate_details").hide();
 $(".donate").click(function(){
@@ -74,6 +85,18 @@ loadJSONdata();
 setInterval( loadJSONdata, 3000 );
 });
 
+function changeColor(newValue, oldValue, element)
+{
+	$(function() {
+	if(newValue > oldValue)
+	element.css("color", "green")
+	else if(newValue < oldValue)
+	element.css("color", "red")
+	else
+	element.css("color", "black")
+	});
+	};
+
 function loadJSONdata()
 {
     $(function() {
@@ -82,38 +105,48 @@ function loadJSONdata()
 	oldSubscribersActive = newSubscribersActive;
 	newSubscribers = data.data.subscribers;
 	newSubscribersActive = data.data.accounts_active;
-   $('.subscribers').text(newSubscribers);
+    $('.subscribers').text(newSubscribers);
 	$('.subscribers_active').text(newSubscribersActive);
-	if(newSubscribers > oldSubscribers)
-	$('.subscribers').css("color", "green")
-	else if(newSubscribers < oldSubscribers)
-	$('.subscribers').css("color", "red")
-	else
-	$('.subscribers').css("color", "black")
-	if(newSubscribersActive > oldSubscribersActive)
-	$('.subscribers_active').css("color", "green")
-	else if(newSubscribersActive < oldSubscribersActive)
-	$('.subscribers_active').css("color", "red")
-	else
-	$('.subscribers_active').css("color", "black")
+	changeColor(newSubscribers, oldSubscribers, $('.subscribers'));
+	changeColor(newSubscribersActive, oldSubscribersActive, $('.subscribers_active'));
 });
-$.ajax({
-    url: 'http://json2jsonp.com/?url=https://poloniex.com/public?command=returnTicker&callback=cbfunc',
-    dataType: 'JSONP',
-    jsonpCallback: 'callback',
-    type: 'GET',
-    success: function (data) {
+	$(function() {
+        $.getJSON("http://jsonp.jit.su/?callback=?&url=https://poloniex.com/public?command=returnTicker", function(data) {
         oldPrice = newPrice;
         newPrice = data.BTC_REDD;
         $('.price').text(newPrice);
-        if(newPrice > oldPrice)
-        $('.price').css("color", "green")
-        else if(newPrice < oldPrice)
-        $('.price').css("color", "red")
-        else
-        $('.price').css("color", "black")
-        //console.log(data.BTC_REDD);
-    }
+		changeColor(newPrice, oldPrice, $('.price'));
+	});
+});
+	$(function() {
+	$.getJSON("http://jsonp.jit.su/?callback=?&url=http://coinmarketcap.northpole.ro/api/all.json", function(data) {
+		items = data.markets;
+		$.each(items, function () {
+		if(this.name == "ReddCoin") {
+		$('.priceUSD').text(this.price);
+		oldSupply = newSupply;
+		newSupply = this.totalSupply;
+		$('.totalSupply').text(newSupply.replace(' RDD', ''));
+		changeColor(newSupply, oldSupply, $('.totalSupply'));
+		oldVolume = newVolume;
+		newVolume = this.volume24;
+		$('.volume24').text(newVolume);
+		changeColor(newVolume, oldVolume, $('.volume24'));
+		oldÇhange = newChange;
+		newChange = this.change24;
+		$('.change24').text(newChange.replace(' %', ''));
+		changeColor(newChange, oldChange, $('.price'));
+		oldPosition = newPosition;
+        newPosition = this.position;
+		$('.position').text(newPosition);
+		changeColor(newPosition, oldPosition, $('.price'));
+		oldMarketCap = newMarketCap;
+		newMarketCap = this.marketCap;
+		$('.marketCap').text(newMarketCap);
+		changeColor(newMarketCap, oldMarketCap, $('.marketCap'));
+		};
+		});
+	});
 });
 });
 };
@@ -137,15 +170,41 @@ Donate
 </div>
 <div>
 <div class="data_container">
-<div class="data_label">Subscribers</div>
+<div class="data_label">Subscribers on /r/reddCoin</div>
 <div class="data_value subscribers"></div>
 </div>
 <div class="data_container">
-<div class="data_label">Subscribers active</div>
+<div class="data_label">Subscribers active on /r/reddCoin</div>
 <div class="data_value subscribers_active"></div>
+</div>
 <div class="data_container">
-<div class="data_label">Price (Poloniex)</div>
+<div class="data_label">Price (BTC)</div>
 <div class="data_value price"></div>
+</div>
+<div class="data_container">
+<div class="data_label">Price (USD)</div>
+<div class="data_value priceUSD"></div>
+</div>
+<div class="data_container">
+<div class="data_label">Total Supply (RDD)</div>
+<div class="data_value totalSupply"></div>
+</div>
+<div class="data_container">
+<div class="data_label">24H Volume (USD)</div>
+<div class="data_value volume24"></div>
+</div>
+<div class="data_container">
+<div class="data_label">24H Change (%)</div>
+<div class="data_value change24"></div>
+</div>
+<div class="data_container">
+<div class="data_label">Position on CoinMarketCap.com</div>
+<div class="data_value position"></div>
+</div>
+<div class="data_container">
+<div class="data_label">Marketcap (USD)</div>
+<div class="data_value marketCap"></div>
+</div>
 </div>
 </div>
 </body>
