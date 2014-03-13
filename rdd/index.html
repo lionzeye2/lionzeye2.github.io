@@ -125,16 +125,16 @@ function loadJSONdata()
 		if(this.name == "ReddCoin") {
 		$('.priceUSD').text(this.price);
 		oldSupply = newSupply;
-		newSupply = this.totalSupply;
-		$('.totalSupply').text(newSupply.replace(' RDD', ''));
+		newSupply = this.totalSupply.replace(' RDD', '');
+		$('.totalSupply').text(newSupply);
 		changeColor(newSupply, oldSupply, $('.totalSupply'));
 		oldVolume = newVolume;
 		newVolume = this.volume24;
 		$('.volume24').text(newVolume);
 		changeColor(newVolume, oldVolume, $('.volume24'));
 		oldÇhange = newChange;
-		newChange = this.change24;
-		$('.change24').text(newChange.replace(' %', '').replace('+', ''));
+		newChange = this.change24.replace(' %', '').replace('+', '');
+		$('.change24').text(newChange);
 		changeColor(newChange, oldChange, $('.price'));
 		oldPosition = newPosition;
         newPosition = this.position;
