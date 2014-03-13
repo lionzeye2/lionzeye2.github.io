@@ -134,7 +134,7 @@ function loadJSONdata()
 		changeColor(newVolume, oldVolume, $('.volume24'));
 		oldÇhange = newChange;
 		newChange = this.change24;
-		$('.change24').text(newChange.replace(' %', ''));
+		$('.change24').text(newChange.replace(' %', '').replace('+', ''));
 		changeColor(newChange, oldChange, $('.price'));
 		oldPosition = newPosition;
         newPosition = this.position;
