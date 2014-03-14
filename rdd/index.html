@@ -111,9 +111,9 @@ function loadJSONdata()
 	changeColor(newSubscribersActive, oldSubscribersActive, $('.subscribers_active'));
 });
 	$(function() {
-        $.getJSON("http://jsonp.jit.su/?callback=?&url=https://poloniex.com/public?command=returnTicker", function(data) {
+        $.getJSON("http://jsonp.jit.su/?callback=?&url=http://pubapi.cryptsy.com/api.php?method=singlemarketdata%26marketid=169", function(data) {
         oldPrice = newPrice;
-        newPrice = data.BTC_REDD;
+        newPrice = data.return.markets.RDD.lasttradeprice;
         $('.price').text(newPrice);
 		changeColor(newPrice, oldPrice, $('.price'));
 	});
