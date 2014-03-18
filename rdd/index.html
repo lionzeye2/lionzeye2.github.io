@@ -111,15 +111,30 @@ function loadJSONdata()
 	changeColor(newSubscribersActive, oldSubscribersActive, $('.subscribers_active'));
 });
 	$(function() {
-        $.getJSON("http://jsonp.jit.su/?callback=?&url=http://pubapi.cryptsy.com/api.php?method=singlemarketdata%26marketid=169", function(data) {
+	$.ajax({
+    url: "http://json2jsonp.com/?url=http://pubapi.cryptsy.com/api.php?method=singlemarketdata%26marketid=169&callback=cbfunc",
+    jsonp: "callback",
+    dataType: "jsonp",
+    data: {
+        format: "json"
+    },
+    success: function( data ) {
         oldPrice = newPrice;
         newPrice = data.return.markets.RDD.lasttradeprice;
         $('.price').text(newPrice);
 		changeColor(newPrice, oldPrice, $('.price'));
-	});
+	}
+});
 });
 	$(function() {
-	$.getJSON("http://jsonp.jit.su/?callback=?&url=http://coinmarketcap.northpole.ro/api/all.json", function(data) {
+	$.ajax({
+    url: "http://json2jsonp.com/?url=http://coinmarketcap.northpole.ro/api/all.json&callback=cbfunc",
+    jsonp: "callback",
+    dataType: "jsonp",
+    data: {
+        format: "json"
+    },
+    success: function( data ) {
 		items = data.markets;
 		$.each(items, function () {
 		if(this.name == "ReddCoin") {
@@ -133,7 +148,7 @@ function loadJSONdata()
 		$('.volume24').text(newVolume);
 		changeColor(newVolume, oldVolume, $('.volume24'));
 		oldÇhange = newChange;
-		newChange = this.change24.replace(' %', '').replace('+', '');
+		newChange = parseFloat(this.change24.replace(' %', '').replace('+', ''));
 		$('.change24').text(newChange);
 		changeColor(newChange, oldChange, $('.price'));
 		oldPosition = newPosition;
@@ -146,7 +161,9 @@ function loadJSONdata()
 		changeColor(newMarketCap, oldMarketCap, $('.marketCap'));
 		};
 		});
-	});
+		}
+});
+	//});
 });
 });
 };
